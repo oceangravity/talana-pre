@@ -24,6 +24,12 @@ export default new Vuex.Store({
 
     GET_CART(state) {
       return state.cart.filter(item => item.qty > 0);
+    },
+
+    GET_CART_COUNTER(state, getters) {
+      let count = 0;
+      getters.GET_CART.forEach(item => (count += item.qty));
+      return count;
     }
   },
   mutations: {

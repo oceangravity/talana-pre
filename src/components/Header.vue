@@ -31,7 +31,7 @@
           <div class="flex items-center justify-end w-full">
             <button
               @click="cartOpen = !cartOpen"
-              class="text-gray-600 focus:outline-none mx-4 sm:mx-0"
+              class="text-gray-600 focus:outline-none mx-4 sm:mx-0 relative"
             >
               <svg
                 class="h-5 w-5"
@@ -46,6 +46,9 @@
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                 ></path>
               </svg>
+              <span class="rounded-full w-6 -mt-4 -mr-3 absolute top-0 right-0 text-xs text-bold p-1 bg-blue-600 text-white">
+                {{ GET_CART_COUNTER }}
+              </span>
             </button>
 
             <div class="flex sm:hidden">
@@ -132,7 +135,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import Cart from "./Cart";
 export default {
   name: "Header",
@@ -145,6 +148,7 @@ export default {
   },
   computed: {
     ...mapState(["categories", "cartIsOpen"]),
+    ...mapGetters(["GET_CART_COUNTER"]),
     cartOpen: {
       get: function() {
         return this.cartIsOpen;
