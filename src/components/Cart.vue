@@ -100,6 +100,17 @@ export default {
 
     setQuantity(action, item) {
       let current = item.qty || 0;
+      if (current === item.stock && action === "+") {
+        this.$notify(
+            {
+              group: "bottom",
+              title: "¡Lo sentimos!",
+              text: `Ya se ha agotado este producto.`
+            },
+            4000
+        );
+        return;
+      }
       action === "+" ? (current += 1) : (current -= 1);
       if (current < 0) current = 0;
       this.SET_QTY_BY_PRODUCT({

@@ -4,7 +4,9 @@
       class="flex items-end h-56 w-full bg-cover"
       :style="{ 'background-image': `url('${product.photo}')` }"
     >
-      <div class="flex uppercase font-bold text-xs h-10 items-center justify-between w-full mx-5  -mb-4 ">
+      <div
+        class="flex uppercase font-bold text-xs h-10 items-center justify-between w-full mx-5  -mb-4 "
+      >
         <span
           v-if="product.stock"
           class="rounded px-3 py-1 bg-blue-200 text-black"
@@ -111,6 +113,17 @@ export default {
     ...mapActions(["SET_QTY_BY_PRODUCT", "ADD_TO_CART"]),
     setQuantity(action) {
       let current = this.product.qty || 0;
+      if (current === this.product.stock && action === "+") {
+        this.$notify(
+          {
+            group: "bottom",
+            title: "¡Lo sentimos!",
+            text: `Ya se ha agotado este producto.`
+          },
+          4000
+        );
+        return;
+      }
       if (current === 0 && action === "+") {
         this.notify();
         this.ADD_TO_CART(this.product);
@@ -124,9 +137,6 @@ export default {
     },
 
     addToCart() {
-      if (!this.product.qty) {
-        this.notify();
-      }
       this.ADD_TO_CART(this.product);
       this.setQuantity("+");
     },
