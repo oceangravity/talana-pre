@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+
+  talana:
+    build:
+      context: .
+      target: 'develop-stage'
+      args:
+        NODE_ENV: development
+    ports:
+      - '8100:8100'
+    volumes:
+      - /home/app/talana/node_modules
+      - .:/home/app/talana
+    stdin_open: true
+    tty: true
+    restart: always
+    environment:
+      - CHOKIDAR_USEPOLLING=true
