@@ -1,2 +1,2 @@
-![alt text](https://raw.githubusercontent.com/oceangravity/nuxt-starter/master/src/assets/logo.png)
+![alt text](https://github.com/oceangravity/talana-pre/blob/master/src/assets/logo.png?raw=true)
 
