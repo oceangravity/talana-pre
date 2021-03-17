@@ -5,10 +5,7 @@
       :style="{ 'background-image': `url('${product.photo}')` }"
     >
       <button
-        @mousedown="product.qty > 0 && ADD_TO_CART(product)"
-        :class="{
-          'opacity-40': product.qty === 0 || product.qty === undefined
-        }"
+        @mousedown="addToCart"
         class="p-2 rounded-full bg-blue-600 text-white mx-5 -mb-4 hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
       >
         <svg
@@ -32,7 +29,7 @@
         <span class="text-gray-500 mt-2">{{ price }}</span>
         <div class="flex items-center mt-1">
           <button
-            @mousedown="setQuantity('-', product.id)"
+            @mousedown="setQuantity('-')"
             class="text-gray-500 focus:outline-none focus:text-gray-600"
           >
             <svg
@@ -49,7 +46,7 @@
           </button>
           <span class="text-gray-700 text-lg mx-2">{{ quantity }}</span>
           <button
-            @mousedown="setQuantity('+', product.id)"
+            @mousedown="setQuantity('+')"
             class="text-gray-500 focus:outline-none focus:text-gray-600"
           >
             <svg
@@ -100,14 +97,29 @@ export default {
   },
   methods: {
     ...mapActions(["SET_QTY_BY_PRODUCT", "ADD_TO_CART"]),
-    setQuantity(action, id) {
+    setQuantity(action) {
       let current = this.product.qty || 0;
       action === "+" ? (current += 1) : (current -= 1);
       if (current < 0) current = 0;
       this.SET_QTY_BY_PRODUCT({
         qty: current,
-        id: id
+        id: this.product.id
       });
+    },
+
+    addToCart() {
+      if (!this.product.qty) {
+        this.$notify(
+          {
+            group: "top",
+            title: "¡Listo!",
+            text: `${this.product.name} ha sido agregado.`
+          },
+          4000
+        );
+      }
+      this.ADD_TO_CART(this.product);
+      this.setQuantity("+");
     }
   }
 };

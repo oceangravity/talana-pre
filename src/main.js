@@ -4,6 +4,9 @@ import "./registerServiceWorker";
 import router from "./router";
 import store from "./store";
 import "./assets/tailwind.css";
+import Notifications from "vt-notifications";
+
+Vue.use(Notifications);
 
 Vue.config.productionTip = false;
 

@@ -107,7 +107,7 @@
       :class="cartOpen ? 'translate-x-0 ease-out' : 'translate-x-full ease-in'"
       class="z-50 fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto bg-white border-l-2 border-gray-300"
     >
-      <div class="flex items-center justify-between">
+      <div class="flex my-3 items-center justify-between">
         <h3 class="text-2xl font-medium text-gray-700">Tu carrito</h3>
         <button
           @click="cartOpen = !cartOpen"
@@ -126,99 +126,17 @@
           </svg>
         </button>
       </div>
-      <hr class="my-3" />
-
-      <div v-for="item in GET_CART" :key="item.id" class="mt-6">
-        <div class="flex">
-          <img
-            class="h-20 w-20 object-cover rounded"
-            :src="item.photo"
-            alt=""
-          />
-          <div>
-            <div class="mx-3">
-              <h3 class="text-sm text-gray-600">{{ item.name }}</h3>
-              <div class="flex items-center mt-1">
-                <button
-                  @mousedown="setQuantity('-', item)"
-                  class="text-gray-500 focus:outline-none focus:text-gray-600"
-                >
-                  <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                </button>
-                <span class="text-gray-700 text-lg mx-2">{{ item.qty }}</span>
-                <button
-                  @mousedown="setQuantity('+', item)"
-                  class="text-gray-500 focus:outline-none focus:text-gray-600"
-                >
-                  <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="text-right text-gray-600">{{ price(item) }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-8">
-        <form class="flex items-center justify-center">
-          <input
-            class="form-input w-48"
-            type="text"
-            placeholder="Código de Promoción"
-          />
-          <button
-            class="ml-3 flex items-center px-3 py-2 bg-blue-600 text-white text-sm uppercase font-medium rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-          >
-            <span>Aplicar</span>
-          </button>
-        </form>
-      </div>
-      <a
-        class="flex items-center justify-center mt-4 px-3 py-2 bg-blue-600 text-white text-sm uppercase font-medium rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-      >
-        <span>Pagar</span>
-        <svg
-          class="h-5 w-5 mx-2"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
-      </a>
+      <Cart></Cart>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
+import Cart from "./Cart";
 export default {
   name: "Header",
+  components: { Cart },
   data() {
     return {
       isOpen: false,
@@ -226,8 +144,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["categories", "cartIsOpen", "cart"]),
-    ...mapGetters(["GET_CART"]),
+    ...mapState(["categories", "cartIsOpen"]),
     cartOpen: {
       get: function() {
         return this.cartIsOpen;
@@ -244,27 +161,9 @@ export default {
       "SET_QTY_BY_PRODUCT",
       "SEARCH_PRODUCTS"
     ]),
+
     setCategory(category) {
       this.SET_CATEGORY(category);
-    },
-
-    setQuantity(action, item) {
-      let current = item.qty || 0;
-      action === "+" ? (current += 1) : (current -= 1);
-      if (current < 0) current = 0;
-      this.SET_QTY_BY_PRODUCT({
-        qty: current,
-        id: item.id
-      });
-    },
-
-    price(item) {
-      const formatter = new Intl.NumberFormat("es-CL", {
-        style: "currency",
-        currency: "CLP"
-      });
-
-      return formatter.format(item.price * item.qty);
     },
 
     search() {
