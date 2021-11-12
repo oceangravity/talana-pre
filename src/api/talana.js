@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://sva.talana.com:8000/api";
+const BASE_URL = "http://sva.talana.com:8000/api";
 
 export default {
   getProducts() {
